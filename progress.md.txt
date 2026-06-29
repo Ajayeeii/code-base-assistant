@@ -1,0 +1,348 @@
+# AI Codebase Assistant - Project Progress
+
+## Project Overview
+
+A portfolio project that allows users to clone a GitHub repository, explore its files, and interact with the codebase using a local AI model (Ollama).
+
+---
+
+# Tech Stack
+
+## Frontend
+
+* React
+* Vite
+* TypeScript (Strict Mode)
+* Tailwind CSS
+* shadcn/ui
+
+## Backend
+
+* FastAPI
+* Python
+* GitPython
+* Ollama
+
+## Database
+
+* None (Version 1)
+
+## Deployment
+
+* Frontend → Vercel
+* Backend → Render
+
+---
+
+# Project Structure
+
+## Frontend
+
+```
+src/
+├── components/
+├── hooks/
+├── pages/
+├── services/
+└── types/
+```
+
+## Backend
+
+```
+app/
+├── routers/
+├── services/
+├── utils/
+├── models/
+└── workspace/
+```
+
+---
+
+# Completed Milestones
+
+## ✅ Milestone 1 — Project Setup
+
+Completed:
+
+### Frontend
+
+* React + Vite
+* TypeScript
+* Tailwind CSS
+* shadcn/ui
+* Basic landing page
+
+### Backend
+
+* FastAPI
+* CORS configuration
+* Health endpoint
+
+Created
+
+Backend
+
+```
+app/main.py
+app/config.py
+app/routers/health.py
+```
+
+Frontend
+
+```
+HomePage.tsx
+services/api.ts
+```
+
+Verified
+
+* Backend running
+* Frontend running
+* Frontend communicates with backend
+
+---
+
+## ✅ Milestone 2 — Clone GitHub Repository
+
+Backend
+
+Created
+
+```
+app/models/repository.py
+app/services/git_service.py
+app/routers/repository.py
+```
+
+Implemented
+
+* RepositoryCloneRequest (Pydantic)
+* POST /repositories/clone
+* GitPython clone service
+* Error handling
+* Repository cloning into
+
+```
+app/workspace/
+```
+
+Frontend
+
+Created
+
+```
+components/RepositoryForm.tsx
+services/repositoryService.ts
+```
+
+Implemented
+
+* GitHub URL input
+* Clone button
+* Loading state
+* Success & error messages
+
+Verified
+
+* Repository cloning works successfully.
+
+---
+
+# ✅ Milestone 3 — Repository Explorer
+
+## Step 1
+
+Created
+
+```
+app/utils/file_utils.py
+```
+
+Implemented
+
+```
+build_file_tree(directory: Path)
+```
+
+Features
+
+* Recursive traversal
+* Nested JSON output
+
+Ignored folders
+
+* .git
+* node_modules
+* **pycache**
+* .venv
+* venv
+* dist
+* build
+
+Verified independently in Python.
+
+---
+
+## Step 2
+
+Implemented
+
+```
+GET /repositories/{repository_name}/tree
+```
+
+Location
+
+```
+app/routers/repository.py
+```
+
+Features
+
+* Reuses build_file_tree()
+* Returns nested repository tree
+* Returns HTTP 404 when repository does not exist
+* No duplicated traversal logic
+
+Verified using Swagger.
+
+---
+
+## Step 3
+
+Frontend integration completed.
+
+Created
+
+```
+src/services/repositoryTreeService.ts
+src/components/RepositoryTree.tsx
+```
+
+Implemented
+
+* Calls
+
+```
+GET /repositories/{repository_name}/tree
+```
+
+* Loading state
+* Error handling
+* Displays repository tree JSON
+
+Current UI
+
+```
+<pre>
+{JSON.stringify(tree, null, 2)}
+</pre>
+```
+
+Verified
+
+* Frontend successfully communicates with backend.
+* Repository tree JSON loads correctly.
+* Repository explorer API works end-to-end.
+
+---
+
+# Current Project Structure
+
+## Backend
+
+```
+app/
+
+config.py
+main.py
+
+routers/
+    health.py
+    repository.py
+
+services/
+    git_service.py
+
+utils/
+    file_utils.py
+
+models/
+    repository.py
+
+workspace/
+    cloned repositories
+```
+
+---
+
+## Frontend
+
+```
+src/
+
+components/
+    RepositoryForm.tsx
+    RepositoryTree.tsx
+
+pages/
+    HomePage.tsx
+
+services/
+    api.ts
+    repositoryService.ts
+    repositoryTreeService.ts
+```
+
+---
+
+# Current Status
+
+The application can now:
+
+* Display landing page
+* Verify backend health
+* Clone GitHub repositories
+* Store repositories locally
+* Build repository file tree
+* Retrieve repository tree through FastAPI
+* Display repository tree JSON in React
+
+Everything has been tested successfully.
+
+---
+
+# Next Milestone
+
+## Milestone 3 — Step 4
+
+Build the recursive Repository Explorer.
+
+Requirements
+
+* Continue incrementally.
+* Explain recursion before writing code.
+* Reuse RepositoryTree component.
+* Replace JSON output with a recursive React component.
+* Initially render only folders/files with indentation.
+* Do NOT add expand/collapse yet.
+* Do NOT add icons yet.
+* Stop after the first working recursive implementation and wait for confirmation.
+
+---
+
+# Notes
+
+* Version 1 intentionally avoids:
+
+  * LangChain
+  * Vector databases
+  * Embeddings
+  * RAG
+
+* Continue following Clean Architecture.
+
+* Prefer native `fetch()` over Axios to stay consistent with the existing frontend services.

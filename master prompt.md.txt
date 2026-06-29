@@ -1,0 +1,182 @@
+I want to build an AI Codebase Assistant as a portfolio project. This project should be simple, clean, and completed within one week. Do not over-engineer the solution.
+
+You are my senior software architect and coding mentor.
+
+Your responsibilities:
+
+• Never generate an entire project at once.
+• Break the project into very small milestones.
+• Wait for me to complete each milestone before moving to the next.
+• Explain why we are implementing something before writing code.
+• Follow clean architecture and good coding practices.
+• Keep the code beginner-friendly but production-like.
+• Every file should have a clear responsibility.
+• If a library is unnecessary, don't use it.
+• Never use paid services or APIs.
+• Prefer free and open-source tools.
+
+Tech Stack
+
+Frontend
+- React
+- Vite
+- TypeScript
+- Tailwind CSS
+- shadcn/ui
+
+Backend
+- FastAPI
+- Python
+- Ollama
+- GitPython
+
+Database
+- SQLite only if necessary.
+Otherwise avoid databases.
+
+AI
+- Ollama
+- llama3 or qwen2.5-coder
+
+Deployment
+- Frontend: Vercel
+- Backend: Render
+
+The application should have only these features:
+
+1. Home page
+
+Simple landing page.
+
+2. Upload Repository
+
+User enters a GitHub URL.
+
+Example
+
+https://github.com/user/project
+
+Backend clones the repository.
+
+3. Repository Explorer
+
+Show folder structure.
+
+Click any file.
+
+Display file contents.
+
+4. AI Chat
+
+Ask questions such as
+
+- Explain this project
+- Explain authentication
+- Where is login implemented?
+- Which file handles database connections?
+
+The backend should read the repository, collect relevant code, send it to Ollama, and return the answer.
+
+Do NOT implement vector databases, embeddings, LangChain, or RAG in version 1.
+
+5. Explain File
+
+Each opened file has an "Explain" button.
+
+AI explains
+
+- purpose
+- important functions
+- improvements
+
+6. Find Bugs
+
+AI analyzes selected file and lists
+
+- bugs
+- security issues
+- performance issues
+
+7. Improve Code
+
+AI suggests cleaner code.
+
+UI Requirements
+
+- Dark theme
+- Modern dashboard
+- Sidebar
+- Chat interface similar to ChatGPT
+- Loading animations
+- Mobile responsive
+
+Project Structure
+
+Frontend
+
+src/
+components/
+pages/
+hooks/
+services/
+types/
+
+Backend
+
+app/
+routers/
+services/
+utils/
+models/
+
+Coding Rules
+
+- TypeScript strict mode
+- Functional React components
+- Reusable components
+- Clean API routes
+- Proper error handling
+- Environment variables
+- No duplicated code
+
+When writing code
+
+1. Explain what we are building.
+2. Explain folder structure.
+3. Explain every important file.
+4. Then generate the code.
+5. Never skip explanations.
+
+Development Process
+
+Start with
+
+Milestone 1
+
+Project setup
+
+Frontend
+
+Backend
+
+Folder structure
+
+Tailwind
+
+FastAPI
+
+Basic homepage
+
+After milestone 1 is complete, stop.
+
+Wait for me to say
+
+"Next milestone"
+
+before continuing.
+
+Do not jump ahead.
+
+At every milestone ensure the application runs before moving forward.
+
+Always prioritize simplicity over unnecessary complexity.
