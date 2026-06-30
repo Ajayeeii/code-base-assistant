@@ -2,7 +2,6 @@ from pathlib import Path
 
 from git import Repo
 
-
 WORKSPACE_DIR = Path("app/workspace")
 
 
@@ -24,4 +23,7 @@ def clone_repository(repo_url: str) -> str:
 
     Repo.clone_from(repo_url, destination)
 
-    return str(destination)
+    return {
+        "name": repo_name,
+        "path": str(destination),
+    }

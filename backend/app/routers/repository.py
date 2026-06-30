@@ -1,12 +1,10 @@
-from fastapi import APIRouter, HTTPException
-
-from app.models.repository import RepositoryCloneRequest
-from app.services.git_services import clone_repository
-
 from pathlib import Path
 
 from fastapi import APIRouter, HTTPException
 
+from app.models.repository import RepositoryCloneRequest
+from app.services.git_services import clone_repository
+from app.services.file_service import FileService
 from app.utils.file_utils import build_file_tree
 
 router = APIRouter(
@@ -18,12 +16,13 @@ router = APIRouter(
 @router.post("/clone")
 def clone_repo(request: RepositoryCloneRequest):
     try:
-        local_path = clone_repository(str(request.url))
+        repo = clone_repository(str(request.url))
+
 
         return {
             "success": True,
             "message": "Repository cloned successfully.",
-            "path": local_path,
+            "path": repo,
         }
 
     except FileExistsError as e:
@@ -36,8 +35,24 @@ def clone_repo(request: RepositoryCloneRequest):
     
 @router.get("/{repository_name}/tree")
 def get_repository_tree(repository_name: str):
+    print(f"repository_name = {repository_name}")
+
+    repository_path = Path("app/workspace") / repository_name
+    print(f"repository_path = {repository_path}")
+
+    if not repository_path.exists():
+        raise HTTPException(
+            status_code=404,
+            detail="Repository not found."
+        )
+
+    return build_file_tree(repository_path)  
+
+
+@router.get("/{repository_name}/file")
+def get_file(repository_name: str, path: str):
     """
-    Return the directory tree of a cloned repository.
+    Return the contents of a file inside the repository.
     """
 
     repository_path = Path("app/workspace") / repository_name
@@ -48,4 +63,17 @@ def get_repository_tree(repository_name: str):
             detail="Repository not found."
         )
 
-    return build_file_tree(repository_path)     
+    file_service = FileService(repository_path)
+
+    try:
+        content = file_service.read_file(path)
+
+        return {
+            "content": content
+        }
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=400,
+            detail=str(e)
+        )

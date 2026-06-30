@@ -1,14 +1,18 @@
 import { useEffect, useState } from "react";
 import { getRepositoryTree } from "../services/repositoryTreeServices";
+import type { TreeNode } from "../types/repository";
+import TreeNodeComponent from "./TreeNode";
 
 type RepositoryTreeProps = {
   repositoryName: string;
+  onFileClick: (path: string) => void;
 };
 
 export default function RepositoryTree({
   repositoryName,
+  onFileClick,
 }: RepositoryTreeProps) {
-  const [tree, setTree] = useState<any>(null);
+  const [tree, setTree] = useState<TreeNode[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -17,7 +21,8 @@ export default function RepositoryTree({
       try {
         const data = await getRepositoryTree(repositoryName);
         setTree(data);
-      } catch {
+      } catch (error) {
+        console.error(error);
         setError("Failed to load repository tree.");
       } finally {
         setLoading(false);
@@ -36,8 +41,14 @@ export default function RepositoryTree({
   }
 
   return (
-    <pre className="mt-4 overflow-auto rounded bg-gray-100 p-4 text-sm">
-      {JSON.stringify(tree, null, 2)}
-    </pre>
+    <div className="mt-4 w-full">
+      {tree.map((node) => (
+        <TreeNodeComponent
+          key={node.name}
+          node={node}
+          onFileClick={onFileClick}
+        />
+      ))}
+    </div>
   );
 }

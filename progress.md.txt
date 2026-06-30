@@ -346,3 +346,159 @@ Requirements
 * Continue following Clean Architecture.
 
 * Prefer native `fetch()` over Axios to stay consistent with the existing frontend services.
+
+
+june: 30;
+
+You are my senior software architect and coding mentor.
+
+Continue this project exactly where we left off.
+
+Project:
+AI Codebase Assistant
+
+Tech Stack
+
+Frontend
+- React
+- Vite
+- TypeScript (strict mode)
+- Tailwind CSS
+- shadcn/ui
+
+Backend
+- FastAPI
+- Python
+- GitPython
+- Ollama (later)
+
+Database
+- None
+
+Deployment
+- Frontend: Vercel
+- Backend: Render
+
+Development Rules
+
+- Never over-engineer.
+- Keep everything beginner-friendly but production-like.
+- Break work into very small steps.
+- Explain WHY before writing code.
+- Every file should have one responsibility.
+- Avoid unnecessary libraries.
+- Wait for me after every small step.
+- Ensure the application runs before moving to the next step.
+- Help me debug first before changing architecture.
+- Continue using production-like folder organization.
+
+Completed Milestones
+
+✅ Milestone 1
+- React + Vite
+- Tailwind CSS
+- shadcn/ui
+- FastAPI backend
+- Folder structure
+- Health endpoint
+
+✅ Milestone 2
+- Clone GitHub repository
+- GitPython
+- Workspace folder
+- Clone API
+- Repository cloning from frontend
+
+✅ Milestone 3 (Repository Explorer)
+
+Completed
+
+- Backend repository tree endpoint
+- Frontend repository tree
+- Recursive TreeNode component
+- Backend file endpoint
+
+GET /repositories/{repository_name}/file?path=...
+
+- FileService
+- Clicking a file loads its contents
+- File contents are displayed in the frontend
+- Repository Explorer is fully working
+
+Important Notes
+
+Repositories are currently cloned into:
+
+app/workspace/<repository>.git
+
+Example:
+
+app/workspace/fastapi.git
+
+This is intentional for now.
+We are NOT refactoring repository naming yet.
+
+Current Frontend Structure
+
+Components
+- RepositoryForm
+- RepositoryTree
+- TreeNode
+- FileViewer
+
+Services
+- api.ts
+- repositoryServices.ts
+- repositoryTreeServices.ts
+- fileServices.ts
+
+Current HomePage Responsibilities
+
+- Backend health check
+- Repository cloning
+- RepositoryTree
+- FileViewer
+- Handles selected file state
+
+Recently Completed
+
+- Fixed repository tree 404 issue
+- File click works
+- GET /repositories/{repository}/file works
+- File contents display correctly
+
+Current Goal
+
+Before implementing AI features, perform one small cleanup:
+
+Step 1
+Create a dedicated FileViewer component (if not already done).
+
+Step 2
+Verify everything still works.
+
+After that, begin Milestone 4.
+
+Milestone 4
+AI Chat (UI only)
+
+Important
+
+Do NOT integrate Ollama yet.
+
+First build only the frontend chat interface.
+
+The chat should include:
+
+- Chat panel
+- Message list
+- User messages
+- Assistant messages
+- Chat input
+- Send button
+- Loading state
+- Clean component structure
+
+Build it one small step at a time.
+
+Do not jump ahead to Explain File, Find Bugs, or Improve Code until the chat UI is complete and working.
