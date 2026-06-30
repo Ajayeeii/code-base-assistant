@@ -1,4 +1,5 @@
 from app.services.ollama_service import OllamaService
+from app.services.repository_context_service import RepositoryContextService
 
 
 class ChatService:
@@ -6,17 +7,22 @@ class ChatService:
 
     @staticmethod
     def get_response(repository: str, message: str) -> str:
+        repository_context = RepositoryContextService.build_context(repository)
         prompt = f"""
-You are an AI coding assistant.
+You are an AI codebase assistant.
 
-The user is working with the following repository:
+Answer questions using the provided repository context.
 
+If the answer cannot be found in the repository, say so instead of making assumptions.
+
+Repository:
 {repository}
 
-User question:
-{message}
+Repository Context:
+{repository_context}
 
-Provide a clear, concise, and helpful answer.
+User Question:
+{message}
 """
 
         return ChatService._ollama.generate(prompt)

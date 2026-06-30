@@ -67,6 +67,7 @@ export default function HomePage() {
       />
 
       <FileViewer
+        repositoryName={repositoryName}
         fileName={selectedFile}
         content={fileContent}
       />

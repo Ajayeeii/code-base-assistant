@@ -1,16 +1,20 @@
 from pathlib import Path
-
 from fastapi import APIRouter, HTTPException
+from pydantic import BaseModel
 
 from app.models.repository import RepositoryCloneRequest
 from app.services.git_services import clone_repository
 from app.services.file_service import FileService
+from app.services.file_explanation_service import FileExplanationService
 from app.utils.file_utils import build_file_tree
 
 router = APIRouter(
     prefix="/repositories",
     tags=["Repositories"],
 )
+
+class ExplainFileRequest(BaseModel):
+    path: str
 
 
 @router.post("/clone")
@@ -70,6 +74,28 @@ def get_file(repository_name: str, path: str):
 
         return {
             "content": content
+        }
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=400,
+            detail=str(e)
+        )
+        
+        
+@router.post("/{repository_name}/explain")
+def explain_file(
+    repository_name: str,
+    request: ExplainFileRequest,
+):
+    try:
+        explanation = FileExplanationService.explain_file(
+            repository=repository_name,
+            path=request.path,
+        )
+
+        return {
+            "explanation": explanation
         }
 
     except Exception as e:
