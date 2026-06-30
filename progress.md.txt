@@ -4,11 +4,13 @@ You are my senior software architect and coding mentor.
 
 Continue this project exactly where we left off.
 
-## Project
+---
+
+# Project
 
 AI Codebase Assistant
 
-## Goal
+Goal:
 
 Build a clean, beginner-friendly, production-like AI Codebase Assistant as a portfolio project.
 
@@ -22,52 +24,53 @@ Do not over-engineer anything.
 
 ## Frontend
 
-* React
-* Vite
-* TypeScript (strict mode)
-* Tailwind CSS
-* shadcn/ui
+- React
+- Vite
+- TypeScript (strict mode)
+- Tailwind CSS
+- shadcn/ui
 
 ## Backend
 
-* FastAPI
-* Python
-* GitPython
-* Ollama
+- FastAPI
+- Python
+- GitPython
+- Ollama
 
 ## AI Model
 
-* qwen2.5-coder:3b
+- qwen2.5-coder:3b
 
 ## Database
 
-* None
+- None
 
 ## Deployment
 
-* Frontend: Vercel
-* Backend: Render
+Frontend → Vercel
+
+Backend → Render
 
 ---
 
 # Development Rules
 
-* Never over-engineer.
-* Break work into very small milestones.
-* Never generate an entire project at once.
-* Explain WHY before writing code.
-* Explain folder structure whenever it changes.
-* Explain every important file.
-* Every file must have one clear responsibility.
-* Prefer simple, production-like architecture.
-* Avoid unnecessary libraries.
-* Keep services separated from UI.
-* Use proper TypeScript types.
-* Use reusable React components.
-* Wait after every milestone until I ask for the next one.
-* Ensure the application runs before moving forward.
-* When modifying existing files, always ask me for the relevant files before suggesting changes.
-* Suggest minimal, targeted changes instead of rewriting entire files.
+- Never over-engineer.
+- Break work into very small milestones.
+- Never generate an entire project at once.
+- Explain WHY before writing code.
+- Explain folder structure whenever it changes.
+- Explain every important file.
+- Every file must have one clear responsibility.
+- Prefer simple, production-like architecture.
+- Avoid unnecessary libraries.
+- Keep services separated from UI.
+- Use proper TypeScript types.
+- Use reusable React components.
+- Wait after every milestone until I ask for the next one.
+- Ensure the application runs before moving forward.
+- When modifying existing files, always ask me for the relevant files before suggesting changes.
+- Suggest minimal, targeted changes instead of rewriting entire files.
 
 ---
 
@@ -77,16 +80,16 @@ Do not over-engineer anything.
 
 Frontend
 
-* React + Vite
-* TypeScript
-* Tailwind CSS
-* shadcn/ui
+- React + Vite
+- TypeScript
+- Tailwind CSS
+- shadcn/ui
 
 Backend
 
-* FastAPI
-* Clean folder structure
-* Health endpoint
+- FastAPI
+- Clean folder structure
+- Health endpoint
 
 ---
 
@@ -94,17 +97,17 @@ Backend
 
 Backend
 
-* GitPython
-* Workspace folder
-* Clone repository endpoint
+- GitPython
+- Clone repository endpoint
+- Workspace folder
 
 Frontend
 
-* Repository cloning form
-* API integration
-* Repository cloning working
+- Repository cloning form
+- API integration
+- Repository cloning working
 
-Repositories are stored in:
+Repositories stored in:
 
 app/workspace/<repository>.git
 
@@ -114,39 +117,41 @@ app/workspace/<repository>.git
 
 Backend
 
-* Repository tree endpoint
-* File endpoint
+Endpoints
+
+- GET /repositories/{repository}/tree
+- GET /repositories/{repository}/file
 
 Frontend
 
-* RepositoryTree
-* Recursive TreeNode
-* FileViewer
+- RepositoryTree
+- Recursive TreeNode
+- FileViewer
 
 Implemented
 
-* Folder navigation
-* File loading
-* File content display
+- Folder navigation
+- File loading
+- File content display
 
 ---
 
-## ✅ Milestone 4 — Frontend Chat UI
+## ✅ Milestone 4 — Chat UI
 
 Components
 
-* ChatPanel
-* ChatInput
-* ChatMessage
+- ChatPanel
+- ChatInput
+- ChatMessage
 
 Implemented
 
-* Local chat state
-* User messages
-* Assistant messages
-* Loading indicator
-* Auto-scroll
-* ChatGPT-style layout
+- Local chat state
+- Assistant messages
+- User messages
+- Loading indicator
+- Auto-scroll
+- ChatGPT-style layout
 
 ---
 
@@ -154,14 +159,14 @@ Implemented
 
 Created
 
-* chat.py
-* ChatService
+- chat.py
+- ChatService
 
 Endpoint
 
 POST /chat
 
-Frontend connected to backend.
+Frontend connected.
 
 ---
 
@@ -173,27 +178,28 @@ app/services/ollama_service.py
 
 Uses
 
-* Official Python Ollama package
-* Model: qwen2.5-coder:3b
+- Official Python Ollama package
+- qwen2.5-coder:3b
 
 Verified
 
-* Ollama running locally
-* Chat endpoint returns real AI responses
+- Ollama running locally
+- AI responses working
 
 ---
 
 ## ✅ Milestone 7 — Repository-Aware Chat
 
-Completed
+Created
 
-* Created repository_context_service.py
-* Reads repository files
-* Ignores unnecessary folders/files
-* Builds repository context
-* ChatService injects repository context into the prompt
-* Chat API unchanged
-* Frontend unchanged
+repository_context_service.py
+
+Implemented
+
+- Reads repository
+- Ignores unnecessary folders
+- Builds repository context
+- Injects repository context into prompt
 
 Architecture
 
@@ -217,37 +223,77 @@ Backend
 
 Created
 
-* file_explanation_service.py
+app/services/file_explanation_service.py
 
 Endpoint
 
-POST /repositories/{repository_name}/explain
+POST /repositories/{repository}/explain
 
 Frontend
 
 Created
 
-* explainFileService.ts
+src/services/explainFileService.ts
 
 Updated
 
-* FileViewer
-* HomePage
-
-Implemented
-
-* Explain button
-* Loading state
-* AI explanation panel
-* Clears explanation when another file is opened
-* Friendly error message
-* Scrollable explanation panel
-* Scrollable file viewer
+- FileViewer
+- Explain button
+- Loading state
+- AI explanation panel
+- Clears explanation when file changes
 
 Verified
 
-* Repository explorer works
-* Explain File works end-to-end with Ollama
+Works end-to-end.
+
+---
+
+## ✅ Milestone 9 — Find Bugs
+
+Backend
+
+Created
+
+app/services/bug_analysis_service.py
+
+Endpoint
+
+POST /repositories/{repository}/find-bugs
+
+Response
+
+{
+    "analysis": "..."
+}
+
+Frontend
+
+Created
+
+src/services/findBugService.ts
+
+Updated
+
+FileViewer
+
+Added
+
+- Find Bugs button
+- Independent loading state
+- AI Bug Analysis panel
+- Clears bug analysis when another file is opened
+
+AI analyzes
+
+- Bugs
+- Security issues
+- Performance issues
+- Code quality issues
+
+Verified
+
+Works end-to-end with Ollama.
 
 ---
 
@@ -256,19 +302,21 @@ Verified
 Frontend
 
 src/
-components/
-pages/
-hooks/
-services/
-types/
+
+- components/
+- pages/
+- hooks/
+- services/
+- types/
 
 Backend
 
 app/
-routers/
-services/
-utils/
-models/
+
+- routers/
+- services/
+- utils/
+- models/
 
 Architecture
 
@@ -280,6 +328,8 @@ FastAPI Routers
 ↓
 Business Services
 ↓
+OllamaService
+↓
 Ollama
 
 Business services never know about React.
@@ -288,22 +338,59 @@ React never knows about Ollama.
 
 ---
 
+# Current Folder Structure
+
+Frontend
+
+src/
+├── components/
+│   ├── chat/
+│   ├── FileViewer.tsx
+│   ├── RepositoryForm.tsx
+│   └── RepositoryTree.tsx
+├── hooks/
+├── pages/
+│   └── HomePage.tsx
+├── services/
+│   ├── api.ts
+│   ├── chatService.ts
+│   ├── explainFileService.ts
+│   ├── fileServices.ts
+│   └── findBugService.ts
+└── types/
+
+Backend
+
+app/
+├── models/
+├── routers/
+│   ├── chat.py
+│   └── repository.py
+├── services/
+│   ├── bug_analysis_service.py
+│   ├── chat_service.py
+│   ├── file_explanation_service.py
+│   ├── file_service.py
+│   ├── git_services.py
+│   ├── ollama_service.py
+│   └── repository_context_service.py
+├── utils/
+├── workspace/
+└── main.py
+
+---
+
 # Current Milestone
 
-## 🚧 Milestone 9 — Find Bugs
+## 🚧 Milestone 10 — Improve Code
 
 Goal
 
-Allow users to analyze the currently opened file.
+Allow users to analyze the currently opened file and receive AI suggestions for improving the code.
 
-The AI should report:
+The AI should only provide suggestions.
 
-* Bugs
-* Security issues
-* Performance issues
-* Code quality issues
-
-The AI should **only analyze the file**, not rewrite or modify it.
+It must NOT rewrite or modify the file.
 
 ---
 
@@ -313,27 +400,27 @@ The AI should **only analyze the file**, not rewrite or modify it.
 
 Create
 
-app/services/bug_analysis_service.py
+app/services/code_improvement_service.py
 
 Add endpoint
 
-POST /repositories/{repository_name}/find-bugs
+POST /repositories/{repository_name}/improve
 
 Request
 
 {
-"path": "app/main.py"
+    "path": "app/main.py"
 }
 
 Response
 
 {
-"analysis": "..."
+    "improvements": "..."
 }
 
-Reuse the same architecture as Explain File.
+Reuse the same architecture as Explain File and Find Bugs.
 
-Do not duplicate logic unnecessarily.
+Do not duplicate unnecessary logic.
 
 ---
 
@@ -341,7 +428,7 @@ Do not duplicate logic unnecessarily.
 
 Create
 
-src/services/findBugService.ts
+src/services/improveCodeService.ts
 
 Update
 
@@ -349,30 +436,29 @@ src/components/FileViewer.tsx
 
 Add
 
-* Find Bugs button
-* Loading state
-* AI bug analysis section
+- Improve Code button
+- Loading state
+- AI Improvement Suggestions panel
 
-Keep the Explain feature unchanged.
+Keep Explain and Find Bugs unchanged.
 
 ---
 
 # Important
 
-Do NOT implement:
+Do NOT implement
 
-* Code improvement
-* Embeddings
-* Vector databases
-* RAG
-* LangChain
-* SQLite
-* Streaming responses
-* Conversation memory
-* Multi-file analysis
+- Embeddings
+- Vector databases
+- LangChain
+- RAG
+- SQLite
+- Streaming responses
+- Conversation memory
+- Multi-file analysis
 
 Keep everything simple and beginner-friendly.
 
-Continue from **Milestone 9 Part A (Backend only)**.
+Continue from **Milestone 10 – Part A (Backend only)**.
 
 Before suggesting changes, ask me for the backend files that need to be modified, then provide minimal, targeted updates instead of rewriting entire files.
