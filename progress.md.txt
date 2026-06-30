@@ -1,10 +1,10 @@
-# Progress Prompt
+# Continue AI Codebase Assistant Project
 
 You are my senior software architect and coding mentor.
 
 Continue this project exactly where we left off.
 
-# Project
+## Project
 
 AI Codebase Assistant
 
@@ -53,6 +53,7 @@ Do not over-engineer anything.
 * Never generate an entire project at once.
 * Explain WHY before writing code.
 * Explain folder structure whenever it changes.
+* Explain every important file.
 * Every file must have one clear responsibility.
 * Prefer simple, production-like architecture.
 * Avoid unnecessary libraries.
@@ -61,14 +62,14 @@ Do not over-engineer anything.
 * Use reusable React components.
 * Wait after every milestone until I ask for the next one.
 * Ensure the application runs before moving forward.
+* When modifying code, always ask me for the relevant files instead of assuming their contents.
+* Suggest minimal, targeted changes rather than rewriting entire files unless necessary.
 
 ---
 
 # Completed Milestones
 
-## ✅ Milestone 1
-
-Project setup
+## ✅ Milestone 1 — Project Setup
 
 Frontend
 
@@ -80,14 +81,12 @@ Frontend
 Backend
 
 * FastAPI
-* Folder structure
+* Clean folder structure
 * Health endpoint
 
 ---
 
-## ✅ Milestone 2
-
-Repository cloning
+## ✅ Milestone 2 — Repository Cloning
 
 Backend
 
@@ -103,33 +102,38 @@ Frontend
 
 Repositories are stored as:
 
+```text
 app/workspace/<repository>.git
+```
 
 ---
 
-## ✅ Milestone 3
-
-Repository Explorer
+## ✅ Milestone 3 — Repository Explorer
 
 Backend
 
 * Repository tree endpoint
 * File endpoint
 
+```text
 GET /repositories/{repository_name}/file?path=...
+```
 
 Frontend
 
 * RepositoryTree
 * Recursive TreeNode
 * FileViewer
-* Clicking a file loads its contents correctly
+
+Implemented
+
+* Folder navigation
+* File loading
+* File content display
 
 ---
 
-## ✅ Milestone 4
-
-Frontend Chat UI
+## ✅ Milestone 4 — Frontend Chat UI
 
 Components
 
@@ -142,27 +146,30 @@ Implemented
 * Local chat state
 * User messages
 * Assistant messages
-* Loading state
+* Loading indicator
 * Auto-scroll
-* ChatGPT-like interface
+* ChatGPT-like layout
 
-Initially used `setTimeout()` to simulate AI responses.
+Initially used `setTimeout()` for fake responses.
 
 ---
 
-## ✅ Milestone 5
+## ✅ Milestone 5 — Backend Chat API
 
-Backend Chat API (without Ollama)
+Backend
 
-### Step 1
+Created
 
-Created a dedicated chat router.
+* `chat.py`
+* `ChatService`
 
-Endpoint:
+Endpoint
 
+```text
 POST /chat
+```
 
-Request:
+Request
 
 ```json
 {
@@ -171,101 +178,129 @@ Request:
 }
 ```
 
-Response:
+Frontend
 
-```json
-{
-  "answer": "This is a fake backend response."
-}
-```
+* `chatService.ts`
+* Connected chat UI to FastAPI
+* Removed fake timeout
+* Loading state
+* Error handling
 
-### Step 2
-
-Created `ChatService`.
-
-Current architecture:
-
-* `chat.py` only handles HTTP.
-* `ChatService` generates the response.
-* Fake response moved out of the router.
-
-### Step 3
-
-Connected the frontend chat to FastAPI.
-
-Completed:
-
-* Created `chatService.ts`
-* Replaced `setTimeout()` with a real API call
-* `ChatPanel` now calls the backend
-* Added `repositoryName` prop to `ChatPanel`
-* Loading state remains while waiting
-* Error handling added
-
-Current frontend flow:
-
-User → ChatPanel → chatService.ts → FastAPI `/chat` → ChatService → Response → UI
-
-Everything is working correctly.
-
-Current repository is still temporarily hardcoded as:
+Current repository name is temporarily hardcoded in the frontend:
 
 ```ts
 const repositoryName = "fastapi.git";
 ```
 
-This is acceptable for now and will be improved later.
+This will be improved later.
+
+---
+
+## ✅ Milestone 6 — Ollama Integration
+
+Created
+
+```text
+app/services/ollama_service.py
+```
+
+Responsibilities
+
+* Encapsulates all Ollama communication.
+* Sends prompts to the model.
+* Returns generated text.
+
+Uses
+
+* Official Python Ollama package
+* Model:
+
+```text
+qwen2.5-coder:3b
+```
+
+Integrated into `ChatService`.
+
+Current `ChatService` calls:
+
+```python
+OllamaService.generate(prompt)
+```
+
+Verified
+
+* Ollama running locally
+* `/chat` endpoint returns real AI responses
+* Frontend chat works without modification
+
+Current backend architecture
+
+```text
+Frontend
+    │
+    ▼
+Chat Router
+    │
+    ▼
+ChatService
+    │
+    ▼
+OllamaService
+    │
+    ▼
+Ollama
+```
 
 ---
 
 # Current Frontend Structure
 
+```text
 src/
 
 components/
-
-* RepositoryForm
-* RepositoryTree
-* TreeNode
-* FileViewer
+    RepositoryForm
+    RepositoryTree
+    TreeNode
+    FileViewer
 
 components/chat/
-
-* ChatPanel
-* ChatInput
-* ChatMessage
+    ChatPanel
+    ChatInput
+    ChatMessage
 
 pages/
-
-* HomePage
+    HomePage
 
 services/
-
-* api.ts
-* repositoryServices.ts
-* repositoryTreeServices.ts
-* fileServices.ts
-* chatService.ts
+    api.ts
+    repositoryServices.ts
+    repositoryTreeServices.ts
+    fileServices.ts
+    chatService.ts
 
 hooks/
 
 types/
+```
 
 ---
 
 # Current Backend Structure
 
+```text
+backend/
+
 app/
 
 routers/
-
-* health.py
-* repository.py
-* chat.py
+    health.py
+    repository.py
+    chat.py
 
 services/
-
-* chat_service.py
+    chat_service.py
+    ollama_service.py
 
 utils/
 
@@ -273,38 +308,53 @@ models/
 
 workspace/
 
+test_ollama.py
+```
+
 ---
 
 # Next Milestone
 
-## Milestone 6
+## Milestone 7 — Repository-Aware Chat (Version 1)
 
-Integrate Ollama incrementally.
+### Goal
 
-### Step 1 (Only)
+Make the AI answer questions using the uploaded repository instead of only its general knowledge.
 
-Create an `ollama_service.py`.
+### Only perform these tasks
 
-Do **not** modify `ChatService` yet.
+1. Explain why repository context is needed.
+2. Explain any folder structure changes.
+3. Ask me for the relevant backend files before suggesting code changes.
+4. Read repository files from the cloned repository.
+5. Build a simple prompt containing:
 
-Verify Ollama is installed and running.
+   * Repository name
+   * User question
+   * Relevant project files or code (without embeddings or retrieval frameworks)
+6. Send the prompt to `OllamaService`.
+7. Keep the `/chat` API unchanged.
+8. Do not modify the frontend.
+9. Keep the implementation simple and beginner-friendly.
 
-Implement a simple function that sends a prompt like:
+### Do NOT implement
 
-> "Say hello."
+* Embeddings
+* Vector databases
+* LangChain
+* LlamaIndex
+* RAG
+* SQLite
+* Streaming responses
+* Conversation memory
+* File explanation feature
+* Bug finder
+* Improve code feature
 
-Return the model response.
-
-Test this service independently before connecting it to the chat endpoint.
-
-Stop after Step 1.
+Stop after Milestone 7 is complete.
 
 Wait for me to say:
 
 **"Next milestone"**
 
 before continuing.
-
-Do not start repository context, file explanations, bug finding, or code improvements yet.
-
-Always explain WHY before writing any code.
