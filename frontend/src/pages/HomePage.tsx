@@ -4,7 +4,7 @@ import RepositoryForm from "../components/RepositoryForm";
 import RepositoryTree from "../components/RepositoryTree";
 import { getFileContent } from "../services/fileServices";
 import FileViewer from "../components/FileViewer";
-
+import ChatPanel from "../components/chat/ChatPanel";
 
 
 export default function HomePage() {
@@ -70,6 +70,8 @@ export default function HomePage() {
         fileName={selectedFile}
         content={fileContent}
       />
+
+      <ChatPanel repositoryName={repositoryName} />
     </main>
   );
 }

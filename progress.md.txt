@@ -1,8 +1,20 @@
-# AI Codebase Assistant - Project Progress
+# Progress Prompt
 
-## Project Overview
+You are my senior software architect and coding mentor.
 
-A portfolio project that allows users to clone a GitHub repository, explore its files, and interact with the codebase using a local AI model (Ollama).
+Continue this project exactly where we left off.
+
+# Project
+
+AI Codebase Assistant
+
+## Goal
+
+Build a clean, beginner-friendly, production-like AI Codebase Assistant as a portfolio project.
+
+The project should be completed in about one week.
+
+Do not over-engineer anything.
 
 ---
 
@@ -12,7 +24,7 @@ A portfolio project that allows users to clone a GitHub repository, explore its 
 
 * React
 * Vite
-* TypeScript (Strict Mode)
+* TypeScript (strict mode)
 * Tailwind CSS
 * shadcn/ui
 
@@ -25,480 +37,274 @@ A portfolio project that allows users to clone a GitHub repository, explore its 
 
 ## Database
 
-* None (Version 1)
+* None
 
 ## Deployment
 
-* Frontend → Vercel
-* Backend → Render
+* Frontend: Vercel
+* Backend: Render
 
 ---
 
-# Project Structure
+# Development Rules
 
-## Frontend
-
-```
-src/
-├── components/
-├── hooks/
-├── pages/
-├── services/
-└── types/
-```
-
-## Backend
-
-```
-app/
-├── routers/
-├── services/
-├── utils/
-├── models/
-└── workspace/
-```
+* Never over-engineer.
+* Break work into very small milestones.
+* Never generate an entire project at once.
+* Explain WHY before writing code.
+* Explain folder structure whenever it changes.
+* Every file must have one clear responsibility.
+* Prefer simple, production-like architecture.
+* Avoid unnecessary libraries.
+* Keep services separated from UI.
+* Use proper TypeScript types.
+* Use reusable React components.
+* Wait after every milestone until I ask for the next one.
+* Ensure the application runs before moving forward.
 
 ---
 
 # Completed Milestones
 
-## ✅ Milestone 1 — Project Setup
+## ✅ Milestone 1
 
-Completed:
+Project setup
 
-### Frontend
+Frontend
 
 * React + Vite
 * TypeScript
 * Tailwind CSS
 * shadcn/ui
-* Basic landing page
 
-### Backend
+Backend
 
 * FastAPI
-* CORS configuration
+* Folder structure
 * Health endpoint
 
-Created
+---
+
+## ✅ Milestone 2
+
+Repository cloning
 
 Backend
 
-```
-app/main.py
-app/config.py
-app/routers/health.py
-```
+* GitPython
+* Workspace folder
+* Clone repository endpoint
 
 Frontend
 
-```
-HomePage.tsx
-services/api.ts
-```
+* Repository cloning form
+* API integration
+* Repository cloning working
 
-Verified
+Repositories are stored as:
 
-* Backend running
-* Frontend running
-* Frontend communicates with backend
+app/workspace/<repository>.git
 
 ---
 
-## ✅ Milestone 2 — Clone GitHub Repository
+## ✅ Milestone 3
+
+Repository Explorer
 
 Backend
 
-Created
+* Repository tree endpoint
+* File endpoint
 
-```
-app/models/repository.py
-app/services/git_service.py
-app/routers/repository.py
-```
-
-Implemented
-
-* RepositoryCloneRequest (Pydantic)
-* POST /repositories/clone
-* GitPython clone service
-* Error handling
-* Repository cloning into
-
-```
-app/workspace/
-```
+GET /repositories/{repository_name}/file?path=...
 
 Frontend
 
-Created
+* RepositoryTree
+* Recursive TreeNode
+* FileViewer
+* Clicking a file loads its contents correctly
 
-```
-components/RepositoryForm.tsx
-services/repositoryService.ts
-```
+---
+
+## ✅ Milestone 4
+
+Frontend Chat UI
+
+Components
+
+* ChatPanel
+* ChatInput
+* ChatMessage
 
 Implemented
 
-* GitHub URL input
-* Clone button
+* Local chat state
+* User messages
+* Assistant messages
 * Loading state
-* Success & error messages
+* Auto-scroll
+* ChatGPT-like interface
 
-Verified
-
-* Repository cloning works successfully.
-
----
-
-# ✅ Milestone 3 — Repository Explorer
-
-## Step 1
-
-Created
-
-```
-app/utils/file_utils.py
-```
-
-Implemented
-
-```
-build_file_tree(directory: Path)
-```
-
-Features
-
-* Recursive traversal
-* Nested JSON output
-
-Ignored folders
-
-* .git
-* node_modules
-* **pycache**
-* .venv
-* venv
-* dist
-* build
-
-Verified independently in Python.
+Initially used `setTimeout()` to simulate AI responses.
 
 ---
 
-## Step 2
+## ✅ Milestone 5
 
-Implemented
+Backend Chat API (without Ollama)
 
+### Step 1
+
+Created a dedicated chat router.
+
+Endpoint:
+
+POST /chat
+
+Request:
+
+```json
+{
+  "repository": "fastapi.git",
+  "message": "Explain this project"
+}
 ```
-GET /repositories/{repository_name}/tree
+
+Response:
+
+```json
+{
+  "answer": "This is a fake backend response."
+}
 ```
 
-Location
+### Step 2
 
+Created `ChatService`.
+
+Current architecture:
+
+* `chat.py` only handles HTTP.
+* `ChatService` generates the response.
+* Fake response moved out of the router.
+
+### Step 3
+
+Connected the frontend chat to FastAPI.
+
+Completed:
+
+* Created `chatService.ts`
+* Replaced `setTimeout()` with a real API call
+* `ChatPanel` now calls the backend
+* Added `repositoryName` prop to `ChatPanel`
+* Loading state remains while waiting
+* Error handling added
+
+Current frontend flow:
+
+User → ChatPanel → chatService.ts → FastAPI `/chat` → ChatService → Response → UI
+
+Everything is working correctly.
+
+Current repository is still temporarily hardcoded as:
+
+```ts
+const repositoryName = "fastapi.git";
 ```
-app/routers/repository.py
-```
 
-Features
-
-* Reuses build_file_tree()
-* Returns nested repository tree
-* Returns HTTP 404 when repository does not exist
-* No duplicated traversal logic
-
-Verified using Swagger.
+This is acceptable for now and will be improved later.
 
 ---
 
-## Step 3
+# Current Frontend Structure
 
-Frontend integration completed.
-
-Created
-
-```
-src/services/repositoryTreeService.ts
-src/components/RepositoryTree.tsx
-```
-
-Implemented
-
-* Calls
-
-```
-GET /repositories/{repository_name}/tree
-```
-
-* Loading state
-* Error handling
-* Displays repository tree JSON
-
-Current UI
-
-```
-<pre>
-{JSON.stringify(tree, null, 2)}
-</pre>
-```
-
-Verified
-
-* Frontend successfully communicates with backend.
-* Repository tree JSON loads correctly.
-* Repository explorer API works end-to-end.
-
----
-
-# Current Project Structure
-
-## Backend
-
-```
-app/
-
-config.py
-main.py
-
-routers/
-    health.py
-    repository.py
-
-services/
-    git_service.py
-
-utils/
-    file_utils.py
-
-models/
-    repository.py
-
-workspace/
-    cloned repositories
-```
-
----
-
-## Frontend
-
-```
 src/
 
 components/
-    RepositoryForm.tsx
-    RepositoryTree.tsx
+
+* RepositoryForm
+* RepositoryTree
+* TreeNode
+* FileViewer
+
+components/chat/
+
+* ChatPanel
+* ChatInput
+* ChatMessage
 
 pages/
-    HomePage.tsx
+
+* HomePage
 
 services/
-    api.ts
-    repositoryService.ts
-    repositoryTreeService.ts
-```
+
+* api.ts
+* repositoryServices.ts
+* repositoryTreeServices.ts
+* fileServices.ts
+* chatService.ts
+
+hooks/
+
+types/
 
 ---
 
-# Current Status
+# Current Backend Structure
 
-The application can now:
+app/
 
-* Display landing page
-* Verify backend health
-* Clone GitHub repositories
-* Store repositories locally
-* Build repository file tree
-* Retrieve repository tree through FastAPI
-* Display repository tree JSON in React
+routers/
 
-Everything has been tested successfully.
+* health.py
+* repository.py
+* chat.py
+
+services/
+
+* chat_service.py
+
+utils/
+
+models/
+
+workspace/
 
 ---
 
 # Next Milestone
 
-## Milestone 3 — Step 4
+## Milestone 6
 
-Build the recursive Repository Explorer.
+Integrate Ollama incrementally.
 
-Requirements
+### Step 1 (Only)
 
-* Continue incrementally.
-* Explain recursion before writing code.
-* Reuse RepositoryTree component.
-* Replace JSON output with a recursive React component.
-* Initially render only folders/files with indentation.
-* Do NOT add expand/collapse yet.
-* Do NOT add icons yet.
-* Stop after the first working recursive implementation and wait for confirmation.
+Create an `ollama_service.py`.
 
----
+Do **not** modify `ChatService` yet.
 
-# Notes
+Verify Ollama is installed and running.
 
-* Version 1 intentionally avoids:
+Implement a simple function that sends a prompt like:
 
-  * LangChain
-  * Vector databases
-  * Embeddings
-  * RAG
+> "Say hello."
 
-* Continue following Clean Architecture.
+Return the model response.
 
-* Prefer native `fetch()` over Axios to stay consistent with the existing frontend services.
+Test this service independently before connecting it to the chat endpoint.
 
+Stop after Step 1.
 
-june: 30;
+Wait for me to say:
 
-You are my senior software architect and coding mentor.
+**"Next milestone"**
 
-Continue this project exactly where we left off.
+before continuing.
 
-Project:
-AI Codebase Assistant
+Do not start repository context, file explanations, bug finding, or code improvements yet.
 
-Tech Stack
-
-Frontend
-- React
-- Vite
-- TypeScript (strict mode)
-- Tailwind CSS
-- shadcn/ui
-
-Backend
-- FastAPI
-- Python
-- GitPython
-- Ollama (later)
-
-Database
-- None
-
-Deployment
-- Frontend: Vercel
-- Backend: Render
-
-Development Rules
-
-- Never over-engineer.
-- Keep everything beginner-friendly but production-like.
-- Break work into very small steps.
-- Explain WHY before writing code.
-- Every file should have one responsibility.
-- Avoid unnecessary libraries.
-- Wait for me after every small step.
-- Ensure the application runs before moving to the next step.
-- Help me debug first before changing architecture.
-- Continue using production-like folder organization.
-
-Completed Milestones
-
-✅ Milestone 1
-- React + Vite
-- Tailwind CSS
-- shadcn/ui
-- FastAPI backend
-- Folder structure
-- Health endpoint
-
-✅ Milestone 2
-- Clone GitHub repository
-- GitPython
-- Workspace folder
-- Clone API
-- Repository cloning from frontend
-
-✅ Milestone 3 (Repository Explorer)
-
-Completed
-
-- Backend repository tree endpoint
-- Frontend repository tree
-- Recursive TreeNode component
-- Backend file endpoint
-
-GET /repositories/{repository_name}/file?path=...
-
-- FileService
-- Clicking a file loads its contents
-- File contents are displayed in the frontend
-- Repository Explorer is fully working
-
-Important Notes
-
-Repositories are currently cloned into:
-
-app/workspace/<repository>.git
-
-Example:
-
-app/workspace/fastapi.git
-
-This is intentional for now.
-We are NOT refactoring repository naming yet.
-
-Current Frontend Structure
-
-Components
-- RepositoryForm
-- RepositoryTree
-- TreeNode
-- FileViewer
-
-Services
-- api.ts
-- repositoryServices.ts
-- repositoryTreeServices.ts
-- fileServices.ts
-
-Current HomePage Responsibilities
-
-- Backend health check
-- Repository cloning
-- RepositoryTree
-- FileViewer
-- Handles selected file state
-
-Recently Completed
-
-- Fixed repository tree 404 issue
-- File click works
-- GET /repositories/{repository}/file works
-- File contents display correctly
-
-Current Goal
-
-Before implementing AI features, perform one small cleanup:
-
-Step 1
-Create a dedicated FileViewer component (if not already done).
-
-Step 2
-Verify everything still works.
-
-After that, begin Milestone 4.
-
-Milestone 4
-AI Chat (UI only)
-
-Important
-
-Do NOT integrate Ollama yet.
-
-First build only the frontend chat interface.
-
-The chat should include:
-
-- Chat panel
-- Message list
-- User messages
-- Assistant messages
-- Chat input
-- Send button
-- Loading state
-- Clean component structure
-
-Build it one small step at a time.
-
-Do not jump ahead to Explain File, Find Bugs, or Improve Code until the chat UI is complete and working.
+Always explain WHY before writing any code.
