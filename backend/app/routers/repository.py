@@ -1,3 +1,5 @@
+import logging
+
 from pathlib import Path
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
@@ -16,6 +18,8 @@ router = APIRouter(
     prefix="/repositories",
     tags=["Repositories"],
 )
+
+logger = logging.getLogger(__name__)
 
 class ExplainFileRequest(BaseModel):
     path: str
@@ -36,8 +40,13 @@ def clone_repo(request: RepositoryCloneRequest):
     except FileExistsError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+    except Exception:
+       logger.exception("Failed to clone repository.")
+
+    raise HTTPException(
+        status_code=500,
+        detail="Failed to clone repository."
+    )
     
     
     
@@ -80,11 +89,19 @@ def get_file(repository_name: str, path: str):
             "content": content
         }
 
-    except Exception as e:
-        raise HTTPException(
-            status_code=400,
-            detail=str(e)
-        )
+    except FileNotFoundError:
+      raise HTTPException(
+        status_code=404,
+        detail="File not found."
+    )
+
+    except Exception:
+     logger.exception("Failed to read file.")
+
+    raise HTTPException(
+        status_code=500,
+        detail="Unable to read the requested file."
+    )
         
         
 @router.post("/{repository_name}/explain")
@@ -102,11 +119,19 @@ def explain_file(
             "explanation": explanation
         }
 
-    except Exception as e:
-        raise HTTPException(
-            status_code=400,
-            detail=str(e)
-        )
+    except FileNotFoundError:
+      raise HTTPException(
+        status_code=404,
+        detail="File not found."
+    )
+
+    except Exception:
+      logger.exception("AI explanation failed.")
+
+    raise HTTPException(
+        status_code=500,
+        detail="Unable to explain the file."
+    )
         
         
 @router.post("/{repository_name}/find-bugs")
@@ -124,11 +149,19 @@ def find_bugs(
             "analysis": analysis
         }
 
-    except Exception as e:
-        raise HTTPException(
-            status_code=400,
-            detail=str(e)
-        )
+    except FileNotFoundError:
+     raise HTTPException(
+        status_code=404,
+        detail="File not found."
+    )
+
+    except Exception:
+      logger.exception("Bug analysis failed.")
+
+    raise HTTPException(
+        status_code=500,
+        detail="Unable to analyze the file."
+    )
         
         
 @router.post("/{repository_name}/improve")
@@ -146,8 +179,16 @@ def improve_code(
             "improvements": improvements
         }
 
-    except Exception as e:
-        raise HTTPException(
-            status_code=400,
-            detail=str(e)
-        )
+    except FileNotFoundError:
+     raise HTTPException(
+        status_code=404,
+        detail="File not found."
+    )
+
+    except Exception:
+     logger.exception("Code improvement failed.")
+
+    raise HTTPException(
+        status_code=500,
+        detail="Unable to generate improvement suggestions."
+    )

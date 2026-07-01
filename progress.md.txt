@@ -109,7 +109,7 @@ Frontend
 
 Repositories stored in:
 
-app/workspace/<repository>.git
+app/workspace/<repository>
 
 ---
 
@@ -261,12 +261,6 @@ Endpoint
 
 POST /repositories/{repository}/find-bugs
 
-Response
-
-{
-    "analysis": "..."
-}
-
 Frontend
 
 Created
@@ -275,25 +269,105 @@ src/services/findBugService.ts
 
 Updated
 
-FileViewer
-
-Added
-
+- FileViewer
 - Find Bugs button
 - Independent loading state
 - AI Bug Analysis panel
 - Clears bug analysis when another file is opened
 
-AI analyzes
-
-- Bugs
-- Security issues
-- Performance issues
-- Code quality issues
-
 Verified
 
 Works end-to-end with Ollama.
+
+---
+
+## ✅ Milestone 10 — Improve Code
+
+Backend
+
+Created
+
+app/services/code_improvement_service.py
+
+Endpoint
+
+POST /repositories/{repository}/improve
+
+Frontend
+
+Created
+
+src/services/improveCodeService.ts
+
+Updated
+
+- FileViewer
+- Improve Code button
+- Independent loading state
+- AI Improvement Suggestions panel
+- Clears improvement suggestions when another file is opened
+
+Verified
+
+Works end-to-end.
+
+---
+
+## ✅ Milestone 11 — Markdown Rendering
+
+Frontend
+
+Installed
+
+- react-markdown
+- remark-gfm
+
+Updated
+
+- ChatMessage.tsx
+- FileViewer.tsx
+
+Implemented
+
+- Markdown rendering for chat responses
+- Markdown rendering for Explain File
+- Markdown rendering for Find Bugs
+- Markdown rendering for Improve Code
+- GitHub Flavored Markdown support
+
+No syntax highlighting or additional plugins.
+
+Verified
+
+Works correctly.
+
+---
+
+## 🚧 Milestone 12 — Backend Error Handling (In Progress)
+
+Goal
+
+Improve API reliability by returning proper HTTP status codes and user-friendly error messages.
+
+Completed
+
+- Updated `app/routers/chat.py`
+  - Added Python logging
+  - Added `HTTPException`
+  - Added logger instance
+  - Returns `404` when repository is missing
+  - Logs unexpected exceptions
+  - Returns generic `500` responses instead of exposing internal errors
+
+Remaining
+
+- Update `app/routers/repository.py`
+  - Add logging
+  - Replace raw `str(e)` responses with friendly messages
+  - Return `404` for missing files/repositories
+  - Log unexpected exceptions using `logger.exception(...)`
+
+Architecture remains unchanged.
 
 ---
 
@@ -313,10 +387,22 @@ Backend
 
 app/
 
-- routers/
-- services/
-- utils/
 - models/
+- routers/
+  - chat.py
+  - repository.py
+- services/
+  - bug_analysis_service.py
+  - chat_service.py
+  - code_improvement_service.py
+  - file_explanation_service.py
+  - file_service.py
+  - git_services.py
+  - ollama_service.py
+  - repository_context_service.py
+- utils/
+- workspace/
+- main.py
 
 Architecture
 
@@ -356,7 +442,8 @@ src/
 │   ├── chatService.ts
 │   ├── explainFileService.ts
 │   ├── fileServices.ts
-│   └── findBugService.ts
+│   ├── findBugService.ts
+│   └── improveCodeService.ts
 └── types/
 
 Backend
@@ -369,6 +456,7 @@ app/
 ├── services/
 │   ├── bug_analysis_service.py
 │   ├── chat_service.py
+│   ├── code_improvement_service.py
 │   ├── file_explanation_service.py
 │   ├── file_service.py
 │   ├── git_services.py
@@ -377,70 +465,6 @@ app/
 ├── utils/
 ├── workspace/
 └── main.py
-
----
-
-# Current Milestone
-
-## 🚧 Milestone 10 — Improve Code
-
-Goal
-
-Allow users to analyze the currently opened file and receive AI suggestions for improving the code.
-
-The AI should only provide suggestions.
-
-It must NOT rewrite or modify the file.
-
----
-
-## Planned Implementation
-
-### Part A — Backend
-
-Create
-
-app/services/code_improvement_service.py
-
-Add endpoint
-
-POST /repositories/{repository_name}/improve
-
-Request
-
-{
-    "path": "app/main.py"
-}
-
-Response
-
-{
-    "improvements": "..."
-}
-
-Reuse the same architecture as Explain File and Find Bugs.
-
-Do not duplicate unnecessary logic.
-
----
-
-### Part B — Frontend
-
-Create
-
-src/services/improveCodeService.ts
-
-Update
-
-src/components/FileViewer.tsx
-
-Add
-
-- Improve Code button
-- Loading state
-- AI Improvement Suggestions panel
-
-Keep Explain and Find Bugs unchanged.
 
 ---
 
@@ -456,9 +480,10 @@ Do NOT implement
 - Streaming responses
 - Conversation memory
 - Multi-file analysis
+- Automatic code modification
 
 Keep everything simple and beginner-friendly.
 
-Continue from **Milestone 10 – Part A (Backend only)**.
+Continue from **Milestone 12**.
 
-Before suggesting changes, ask me for the backend files that need to be modified, then provide minimal, targeted updates instead of rewriting entire files.
+Before suggesting changes, ask me for the relevant files that need to be modified, then provide minimal, targeted updates instead of rewriting entire files.

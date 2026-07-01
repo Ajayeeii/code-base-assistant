@@ -2,7 +2,8 @@ import { useEffect, useState } from "react";
 import { explainFile } from "../services/explainFileService";
 import { findBugs } from "../services/findBugService";
 import { improveCode } from "../services/improveCodeService";
-
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 
 type FileViewerProps = {
@@ -121,9 +122,11 @@ export default function FileViewer({
           </h3>
 
           <div className="max-h-96 overflow-y-auto rounded bg-slate-950 p-3">
-            <p className="whitespace-pre-wrap leading-7 text-slate-300">
-              {explanation}
-            </p>
+            <div className="prose prose-invert max-w-none text-slate-300">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {explanation}
+              </ReactMarkdown>
+            </div>
           </div>
         </div>
       )}
@@ -135,9 +138,11 @@ export default function FileViewer({
           </h3>
 
           <div className="max-h-96 overflow-y-auto rounded bg-slate-950 p-3">
-            <p className="whitespace-pre-wrap leading-7 text-slate-300">
-              {bugAnalysis}
-            </p>
+            <div className="prose prose-invert max-w-none text-slate-300">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {bugAnalysis}
+              </ReactMarkdown>
+            </div>
           </div>
         </div>
       )}
@@ -149,9 +154,11 @@ export default function FileViewer({
           </h3>
 
           <div className="max-h-96 overflow-y-auto rounded bg-slate-950 p-3">
-            <p className="whitespace-pre-wrap leading-7 text-slate-300">
-              {improvements}
-            </p>
+            <div className="prose prose-invert max-w-none text-slate-300">
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                {improvements}
+              </ReactMarkdown>
+            </div>
           </div>
         </div>
       )}
