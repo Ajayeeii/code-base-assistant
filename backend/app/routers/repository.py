@@ -8,6 +8,9 @@ from app.services.file_service import FileService
 from app.services.file_explanation_service import FileExplanationService
 from app.utils.file_utils import build_file_tree
 from app.services.bug_analysis_service import BugAnalysisService
+from app.services.code_improvement_service import CodeImprovementService
+
+
 
 router = APIRouter(
     prefix="/repositories",
@@ -119,6 +122,28 @@ def find_bugs(
 
         return {
             "analysis": analysis
+        }
+
+    except Exception as e:
+        raise HTTPException(
+            status_code=400,
+            detail=str(e)
+        )
+        
+        
+@router.post("/{repository_name}/improve")
+def improve_code(
+    repository_name: str,
+    request: ExplainFileRequest,
+):
+    try:
+        improvements = CodeImprovementService.improve_file(
+            repository=repository_name,
+            path=request.path,
+        )
+
+        return {
+            "improvements": improvements
         }
 
     except Exception as e:

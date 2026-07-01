@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import { explainFile } from "../services/explainFileService";
 import { findBugs } from "../services/findBugService";
+import { improveCode } from "../services/improveCodeService";
+
+
 
 type FileViewerProps = {
   repositoryName: string;
@@ -17,10 +20,13 @@ export default function FileViewer({
   const [explanation, setExplanation] = useState("");
   const [bugLoading, setBugLoading] = useState(false);
   const [bugAnalysis, setBugAnalysis] = useState("");
+  const [improveLoading, setImproveLoading] = useState(false);
+  const [improvements, setImprovements] = useState("");
 
   useEffect(() => {
     setExplanation("");
     setBugAnalysis("");
+    setImprovements("");
   }, [fileName]);
 
   if (!fileName) {
@@ -57,6 +63,21 @@ export default function FileViewer({
     }
   }
 
+  async function handleImproveCode() {
+    try {
+      setImproveLoading(true);
+
+      const data = await improveCode(repositoryName, fileName);
+
+      setImprovements(data.improvements);
+    } catch (error) {
+      console.error(error);
+      setImprovements("Failed to generate improvement suggestions.");
+    } finally {
+      setImproveLoading(false);
+    }
+  }
+
   return (
     <div className="mt-8 w-full max-w-5xl rounded-lg border border-slate-700 p-4">
       <div className="mb-4 flex items-center justify-between">
@@ -77,6 +98,14 @@ export default function FileViewer({
             className="rounded bg-red-600 px-4 py-2 text-sm hover:bg-red-700 disabled:opacity-50"
           >
             {bugLoading ? "Analyzing..." : "Find Bugs"}
+          </button>
+
+          <button
+            onClick={handleImproveCode}
+            disabled={improveLoading}
+            className="rounded bg-emerald-600 px-4 py-2 text-sm hover:bg-emerald-700 disabled:opacity-50"
+          >
+            {improveLoading ? "Analyzing..." : "Improve Code"}
           </button>
         </div>
       </div>
@@ -108,6 +137,20 @@ export default function FileViewer({
           <div className="max-h-96 overflow-y-auto rounded bg-slate-950 p-3">
             <p className="whitespace-pre-wrap leading-7 text-slate-300">
               {bugAnalysis}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {improvements && (
+        <div className="mt-6 rounded-lg border border-slate-700 bg-slate-900 p-4">
+          <h3 className="mb-3 text-lg font-semibold">
+            AI Improvement Suggestions
+          </h3>
+
+          <div className="max-h-96 overflow-y-auto rounded bg-slate-950 p-3">
+            <p className="whitespace-pre-wrap leading-7 text-slate-300">
+              {improvements}
             </p>
           </div>
         </div>
