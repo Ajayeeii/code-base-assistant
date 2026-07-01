@@ -31,7 +31,11 @@ export default function FileViewer({
   }, [fileName]);
 
   if (!fileName) {
-    return null;
+    return (
+      <div className="flex h-full items-center justify-center text-slate-400">
+        Select a file from the Explorer.
+      </div>
+    );
   }
 
   async function handleExplain() {
@@ -80,7 +84,7 @@ export default function FileViewer({
   }
 
   return (
-    <div className="mt-8 w-full max-w-5xl rounded-lg border border-slate-700 p-4">
+    <div className="h-full overflow-y-auto p-6">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-lg font-semibold">{fileName}</h2>
 

@@ -80,7 +80,7 @@ export default function ChatPanel({
     }, [messages, isLoading]);
 
     return (
-        <section className="mt-8 w-full max-w-5xl rounded-lg border border-slate-700 bg-slate-900">
+        <section className="flex h-full flex-col">
             <div className="border-b border-slate-700 px-4 py-3">
                 <h2 className="text-lg font-semibold">
                     AI Assistant
@@ -89,7 +89,7 @@ export default function ChatPanel({
 
             <div
                 ref={messagesContainerRef}
-                className="flex h-96 flex-col gap-4 overflow-y-auto p-4"
+                className="flex-1 overflow-y-auto p-4 space-y-4"
             >
                 {messages.map((message, index) => (
                     <ChatMessage

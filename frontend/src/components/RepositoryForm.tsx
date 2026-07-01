@@ -2,7 +2,13 @@ import { useState } from "react";
 import type { SyntheticEvent } from "react";
 import { cloneRepository } from "../services/repositoryServices";
 
-export default function RepositoryForm() {
+interface RepositoryFormProps {
+  onRepositoryCloned: (repositoryName: string) => void;
+}
+
+export default function RepositoryForm({
+  onRepositoryCloned,
+}: RepositoryFormProps) {
   const [url, setUrl] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
@@ -15,7 +21,11 @@ export default function RepositoryForm() {
 
     try {
       const result = await cloneRepository({ url });
+
+      console.log("Clone response:", result);
+
       setMessage(result.message);
+      onRepositoryCloned(result.repository);
       setUrl("");
     } catch (error) {
       if (error instanceof Error) {

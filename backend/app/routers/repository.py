@@ -12,14 +12,13 @@ from app.utils.file_utils import build_file_tree
 from app.services.bug_analysis_service import BugAnalysisService
 from app.services.code_improvement_service import CodeImprovementService
 
-
-
 router = APIRouter(
     prefix="/repositories",
     tags=["Repositories"],
 )
 
 logger = logging.getLogger(__name__)
+
 
 class ExplainFileRequest(BaseModel):
     path: str
@@ -30,26 +29,21 @@ def clone_repo(request: RepositoryCloneRequest):
     try:
         repo = clone_repository(str(request.url))
 
-
         return {
-            "success": True,
-            "message": "Repository cloned successfully.",
-            "path": repo,
-        }
+    "success": True,
+    "message": "Repository cloned successfully.",
+    "repository": repo["name"],
+}
 
     except FileExistsError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
     except Exception:
-       logger.exception("Failed to clone repository.")
+        logger.exception("Failed to clone repository.")
 
-    raise HTTPException(
-        status_code=500,
-        detail="Failed to clone repository."
-    )
-    
-    
-    
+    raise HTTPException(status_code=500, detail="Failed to clone repository.")
+
+
 @router.get("/{repository_name}/tree")
 def get_repository_tree(repository_name: str):
     print(f"repository_name = {repository_name}")
@@ -58,12 +52,9 @@ def get_repository_tree(repository_name: str):
     print(f"repository_path = {repository_path}")
 
     if not repository_path.exists():
-        raise HTTPException(
-            status_code=404,
-            detail="Repository not found."
-        )
+        raise HTTPException(status_code=404, detail="Repository not found.")
 
-    return build_file_tree(repository_path)  
+    return build_file_tree(repository_path)
 
 
 @router.get("/{repository_name}/file")
@@ -75,35 +66,24 @@ def get_file(repository_name: str, path: str):
     repository_path = Path("app/workspace") / repository_name
 
     if not repository_path.exists():
-        raise HTTPException(
-            status_code=404,
-            detail="Repository not found."
-        )
+        raise HTTPException(status_code=404, detail="Repository not found.")
 
     file_service = FileService(repository_path)
 
     try:
         content = file_service.read_file(path)
 
-        return {
-            "content": content
-        }
+        return {"content": content}
 
     except FileNotFoundError:
-      raise HTTPException(
-        status_code=404,
-        detail="File not found."
-    )
+        raise HTTPException(status_code=404, detail="File not found.")
 
     except Exception:
-     logger.exception("Failed to read file.")
+        logger.exception("Failed to read file.")
 
-    raise HTTPException(
-        status_code=500,
-        detail="Unable to read the requested file."
-    )
-        
-        
+    raise HTTPException(status_code=500, detail="Unable to read the requested file.")
+
+
 @router.post("/{repository_name}/explain")
 def explain_file(
     repository_name: str,
@@ -115,25 +95,17 @@ def explain_file(
             path=request.path,
         )
 
-        return {
-            "explanation": explanation
-        }
+        return {"explanation": explanation}
 
     except FileNotFoundError:
-      raise HTTPException(
-        status_code=404,
-        detail="File not found."
-    )
+        raise HTTPException(status_code=404, detail="File not found.")
 
     except Exception:
-      logger.exception("AI explanation failed.")
+        logger.exception("AI explanation failed.")
 
-    raise HTTPException(
-        status_code=500,
-        detail="Unable to explain the file."
-    )
-        
-        
+    raise HTTPException(status_code=500, detail="Unable to explain the file.")
+
+
 @router.post("/{repository_name}/find-bugs")
 def find_bugs(
     repository_name: str,
@@ -145,25 +117,17 @@ def find_bugs(
             path=request.path,
         )
 
-        return {
-            "analysis": analysis
-        }
+        return {"analysis": analysis}
 
     except FileNotFoundError:
-     raise HTTPException(
-        status_code=404,
-        detail="File not found."
-    )
+        raise HTTPException(status_code=404, detail="File not found.")
 
     except Exception:
-      logger.exception("Bug analysis failed.")
+        logger.exception("Bug analysis failed.")
 
-    raise HTTPException(
-        status_code=500,
-        detail="Unable to analyze the file."
-    )
-        
-        
+    raise HTTPException(status_code=500, detail="Unable to analyze the file.")
+
+
 @router.post("/{repository_name}/improve")
 def improve_code(
     repository_name: str,
@@ -175,20 +139,14 @@ def improve_code(
             path=request.path,
         )
 
-        return {
-            "improvements": improvements
-        }
+        return {"improvements": improvements}
 
     except FileNotFoundError:
-     raise HTTPException(
-        status_code=404,
-        detail="File not found."
-    )
+        raise HTTPException(status_code=404, detail="File not found.")
 
     except Exception:
-     logger.exception("Code improvement failed.")
+        logger.exception("Code improvement failed.")
 
     raise HTTPException(
-        status_code=500,
-        detail="Unable to generate improvement suggestions."
+        status_code=500, detail="Unable to generate improvement suggestions."
     )

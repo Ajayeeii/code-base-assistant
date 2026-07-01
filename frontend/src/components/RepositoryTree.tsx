@@ -17,6 +17,14 @@ export default function RepositoryTree({
   const [error, setError] = useState("");
 
   useEffect(() => {
+    if (!repositoryName) {
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
     const fetchTree = async () => {
       try {
         const data = await getRepositoryTree(repositoryName);
@@ -41,7 +49,7 @@ export default function RepositoryTree({
   }
 
   return (
-    <div className="mt-4 w-full">
+    <div className="w-full text-sm">
       {tree.map((node) => (
         <TreeNodeComponent
           key={node.name}

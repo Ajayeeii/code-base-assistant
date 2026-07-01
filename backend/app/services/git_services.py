@@ -5,7 +5,7 @@ from git import Repo
 WORKSPACE_DIR = Path("app/workspace")
 
 
-def clone_repository(repo_url: str) -> str:
+def clone_repository(repo_url: str) -> dict:
     """
     Clone a GitHub repository into the local workspace.
 
